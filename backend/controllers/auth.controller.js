@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { sendLoginEmail } from "../utils/emailHandler.js";
 
 
 // register
@@ -100,6 +101,8 @@ export const login = async (req, res) => {
 
 
         user.password = null;
+
+        await sendLoginEmail(user.email);
 
         return res.status(200).cookie("twixter", token, {
             httpOnly: true,
