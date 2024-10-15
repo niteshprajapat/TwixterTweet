@@ -20,7 +20,7 @@ const transporter = nodemailer.createTransport({
 
 
 
-
+// sendLoginEmail
 export const sendLoginEmail = async (userEmail) => {
     try {
         const info = await transporter.sendMail({
@@ -39,6 +39,52 @@ export const sendLoginEmail = async (userEmail) => {
         console.log("Error sending login email", error);
     }
 }
+
+
+// sendPasswordResetEmail
+export const sendPasswordResetEmail = async (userEmail, resetURL) => {
+    try {
+        const info = await transporter.sendMail({
+            from: `TwisterTweet <${process.env.EMAIL_USER}> `,
+            to: userEmail,
+            subject: "Login Notification",
+            text: "Reset Password Link.",
+            html: `<p>   
+            <a href=${resetURL}>Reset Link</a>
+            </p>`,
+        });
+
+        console.log("Login mail Sent");
+        console.log(`Login email send: ${info?.messageId}`);
+
+
+    } catch (error) {
+        console.log("Error sending login email", error);
+    }
+}
+
+// sendResetSuccessEmail
+export const sendResetSuccessEmail = async (userEmail) => {
+    try {
+        const info = await transporter.sendMail({
+            from: `TwisterTweet <${process.env.EMAIL_USER}> `,
+            to: userEmail,
+            subject: "Login Notification",
+            text: "Reset Password Link.",
+            html: `<p>   
+            Password Reset Successfully!
+            </p>`,
+        });
+
+        console.log("Login mail Sent");
+        console.log(`Login email send: ${info?.messageId}`);
+
+
+    } catch (error) {
+        console.log("Error sending login email", error);
+    }
+}
+
 
 
 
