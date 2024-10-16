@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import { connectDB } from './config/database.js';
 import authRoutes from './routes/auth.routes.js'
+import userRoutes from './routes/user.routes.js'
 
 
 
@@ -30,6 +31,7 @@ app.use(cors({
 
 // Route Middlewares
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/user', userRoutes);
 
 
 
