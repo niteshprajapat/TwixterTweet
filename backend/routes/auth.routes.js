@@ -12,14 +12,4 @@ router.get("/logout", isAuthenticated, logout);
 router.post('/forgot-password', forgotPassword);
 router.post('/reset-password/:token', resetPassword);
 
-
-
-
-
-
-
-// This route will be in user routes
-// router.get("/me", isAuthenticated, getMyProfile);
-
-
 export default router;
