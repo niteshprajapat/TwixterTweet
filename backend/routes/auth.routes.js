@@ -12,4 +12,6 @@ router.get("/logout", isAuthenticated, logout);
 router.post('/forgot-password', forgotPassword);
 router.post('/reset-password/:token', resetPassword);
 
+// Google OAuth
+
 export default router;
