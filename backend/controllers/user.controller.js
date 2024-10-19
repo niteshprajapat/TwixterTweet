@@ -171,3 +171,162 @@ export const getSuggestedUsers = async (req, res) => {
         });
     }
 }
+
+// searchAccount - by username, name
+export const searchAccount = async (req, res) => {
+    try {
+        const { query } = req.query;
+
+        if (!query) {
+            return res.status(400).json({
+                success: false,
+                message: "Please provide query!",
+            });
+        }
+
+        const users = await User.find({
+            $or: [
+                { userName: { $regex: query, $options: 'i' } },
+                { fullName: { $regex: query, $options: 'i' } },
+            ]
+        }).select("-password");
+
+
+
+        if (!users?.length) {
+            return res.status(200).json({
+                success: true,
+                message: "Account Not Found!",
+                users: [],
+            })
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Fetched Accounts!",
+            users,
+        })
+
+
+
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error!",
+        });
+    }
+}
+
+
+// deleteAccount
+export const deleteAccount = async (req, res) => {
+    try {
+        const userId = req.user._id;
+
+        if (!userId) {
+            return res.status(400).json({
+                success: false,
+                message: "User Not Found!",
+            })
+        }
+
+        const user = await User.findByIdAndDelete(userId);
+        if (!user) {
+            return res.status(400).json({
+                success: false,
+                message: "User Account Not Found!",
+            });
+        }
+
+
+        return res.status(200).json({
+            success: true,
+            message: "Account Deleted Successfully!",
+            user,
+        })
+
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error!",
+        });
+    }
+}
+
+// followingList
+export const followingList = async (req, res) => {
+    try {
+
+        const userId = req.params.id;
+
+        if (!userId) {
+            return res.status(400).json({
+                success: false,
+                message: "User Not Found!",
+            })
+        }
+
+        const user = await User.findById(userId).populate({
+            path: "following",
+            select: "-password",
+        })
+
+
+        const userFollowing = user.following;
+
+        return res.status(200).json({
+            success: true,
+            message: "User Following List!",
+            userFollowing,
+        })
+
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error!",
+        });
+    }
+}
+
+// followingList
+export const followersList = async (req, res) => {
+    try {
+
+        const userId = req.params.id;
+
+        if (!userId) {
+            return res.status(400).json({
+                success: false,
+                message: "User Not Found!",
+            })
+        }
+
+        const user = await User.findById(userId).populate({
+            path: "followers",
+            select: "-password",
+        })
+
+
+        const userFollowers = user.followers;
+
+        return res.status(200).json({
+            success: true,
+            message: "User Following List!",
+            userFollowers,
+        })
+
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error!",
+        });
+    }
+}
