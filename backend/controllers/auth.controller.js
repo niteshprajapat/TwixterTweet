@@ -199,7 +199,10 @@ export const resetPassword = async (req, res) => {
         const resetToken = req.params.token;
         const { newPassword } = req.body;
 
-        const user = await User.findOne({ resetPasswordToken: resetToken, resetPasswordTokenExpiresAt: { $gt: Date.now() } });
+        const user = await User.findOne({
+            resetPasswordToken: resetToken,
+            resetPasswordTokenExpiresAt: { $gt: Date.now() },
+        });
 
         if (!user) {
             return res.status(400).json({
