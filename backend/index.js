@@ -1,21 +1,38 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import passport from 'passport';
+import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import { connectDB } from './config/database.js';
 import authRoutes from './routes/auth.routes.js'
 import userRoutes from './routes/user.routes.js'
-
+import './utils/passportSetup.js';
+import { cloudinaryConfig } from './config/cloudinary.js';
 
 
 // Configuration
 dotenv.config({});
 connectDB();
+cloudinaryConfig();
 
 
 // Initialization
 const app = express();
 const port = process.env.PORT || 5000;
+
+
+
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false } // Set to true if using HTTPS
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 
 // Middlewwares
@@ -28,6 +45,8 @@ app.use(cors({
     credentials: true,
 }));
 
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Route Middlewares
 app.use('/api/v1/auth', authRoutes);
