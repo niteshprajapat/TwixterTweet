@@ -4,6 +4,12 @@ const router = express.Router();
 
 import { isAuthenticated } from '../middlewares/authMiddleware.js';
 import { followUnfollowByID, getProfileById, meProfile, getSuggestedUsers, searchAccount, deleteAccount, followingList, followersList } from '../controllers/user.controller.js';
+import { uploadMedia } from '../utils/imageUploadFile.js';
+
+
+// Upload Image API
+router.post('/uploadFile', uploadMedia)
+
 
 
 router.get("/me", isAuthenticated, meProfile);
@@ -21,7 +27,9 @@ router.get("followersList/:id", isAuthenticated, followersList)
 
 router.delete('/deleteAccount', isAuthenticated, deleteAccount);
 
+
 // Update User - Pending
+
 
 
 export default router;
