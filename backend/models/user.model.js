@@ -19,6 +19,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    googleId: {
+        type: String,
+        unique: true, // Unique identifier for Google users
+    },
     bio: {
         type: String,
         default: ""
