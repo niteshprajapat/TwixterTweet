@@ -7,6 +7,7 @@ import cors from 'cors';
 import { connectDB } from './config/database.js';
 import authRoutes from './routes/auth.routes.js'
 import userRoutes from './routes/user.routes.js'
+import tweetRoutes from './routes/tweet.routes.js'
 import './utils/passportSetup.js';
 import { cloudinaryConfig } from './config/cloudinary.js';
 
@@ -51,6 +52,7 @@ app.use(passport.session());
 // Route Middlewares
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/user', userRoutes);
+app.use('/api/v1/tweet', tweetRoutes);
 
 
 
