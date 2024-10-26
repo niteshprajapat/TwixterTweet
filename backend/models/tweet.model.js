@@ -1,6 +1,10 @@
 import mongoose, { now } from "mongoose";
 
 const tweetSchema = new mongoose.Schema({
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+    },
     tweetContent: {
         type: String,
         required: true,
@@ -26,10 +30,7 @@ const tweetSchema = new mongoose.Schema({
             ref: "Comment",
         }
     ],
-    userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-    }
+
 
 }, { timestamps: true });
 
