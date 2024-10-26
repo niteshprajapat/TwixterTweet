@@ -330,3 +330,37 @@ export const followersList = async (req, res) => {
         });
     }
 }
+
+// updateProfile
+export const updateProfile = async (req, res) => {
+    try {
+
+        const userId = req.user._id;
+
+        const { fullName, userName, email, bio, avatar, coverImage, socialLink } = req.body;
+
+        const user = await User.findByIdAndUpdate(
+            userId,
+            {
+                $set: { fullName, userName, email, bio, avatar, coverImage, socialLink }
+            },
+            { new: true },
+        );
+
+
+        return res.status(200).json({
+            success: true,
+            message: "Profile Updated Successfully!",
+            user,
+        });
+
+
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error!",
+        });
+    }
+}
