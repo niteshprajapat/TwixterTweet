@@ -9,8 +9,7 @@ router.post("/createTweet", isAuthenticated, createTweet);
 router.delete("/deleteTweet/:id", isAuthenticated, deleteTweet);
 router.put("/updateTweet/:id", isAuthenticated, updateTweet);
 
-router.get("/likeUnlikeTweet/:id", isAuthenticated, likeUnlikeTweet)
-
+router.get("/likeUnlikeTweet/:id", isAuthenticated, likeUnlikeTweet);
 
 export default router;
 
