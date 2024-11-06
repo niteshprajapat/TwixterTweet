@@ -4,6 +4,7 @@ const tweetSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
+        required: true,
     },
     tweetContent: {
         type: String,
@@ -16,18 +17,21 @@ const tweetSchema = new mongoose.Schema({
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
+            default: []
         },
     ],
     retweet: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
+            default: []
         }
     ],
     comments: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Comment",
+            default: []
         }
     ],
 
