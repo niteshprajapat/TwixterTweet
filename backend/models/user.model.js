@@ -51,6 +51,13 @@ const userSchema = new mongoose.Schema({
             ref: "User",
         }
     ],
+    bookmarkedTweet: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Tweet"
+        }
+    ],
+
     joinedOn: {
         type: Date,
         default: Date.now
