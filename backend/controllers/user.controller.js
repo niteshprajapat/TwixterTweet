@@ -1,5 +1,6 @@
 import User from "../models/user.model.js";
 import Notification from "../models/notification.model.js";
+import Tweet from "../models/tweet.model.js";
 
 
 
@@ -231,6 +232,8 @@ export const deleteAccount = async (req, res) => {
                 message: "User Not Found!",
             })
         }
+
+        await Tweet.deleteMany({ userId });
 
         const user = await User.findByIdAndDelete(userId);
         if (!user) {
