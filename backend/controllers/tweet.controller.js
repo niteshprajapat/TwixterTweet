@@ -2,6 +2,26 @@ import Notification from "../models/notification.model.js";
 import Tweet from "../models/tweet.model.js";
 import User from "../models/user.model.js";
 
+// fetchAllTweets
+export const fetchAllTweets = async (req, res) => {
+    try {
+        const tweets = await Tweet.find({}).sort({ createdAt: -1 });
+
+        return res.status(201).json({
+            success: true,
+            message: "Fetched All Tweets Successfully!",
+            tweets,
+        });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error!",
+        });
+    }
+}
+
 // createTweet
 export const createTweet = async (req, res) => {
     try {
@@ -252,5 +272,107 @@ export const bookmarkTweet = async (req, res) => {
     }
 }
 
+// followingTweetsOnly
+export const followingTweetsOnly = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const user = await User.findById(userId).select("following");
+
+        if (!user) {
+            return res.status(400).json({
+                success: false,
+                message: "User Not Found!",
+            });
+        }
+
+        const tweets = await Tweet.find({
+            userId: { $in: user.following }
+        }).populate({
+            path: "userId",
+            select: "-password",
+        }).sort({ createdAt: -1 });
+
+        return res.status(200).json({
+            success: true,
+            message: "Fetched all Tweets of following users",
+            tweets,
+        });
+
+
+
+
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error!",
+        });
+    }
+}
+
+// likedPostByUserId
+export const likedTweetByUserId = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+
+        const likedPosts = await Tweet.find({ likes: { $in: userId } }).sort({ createdAt: -1 });
+        // const likedPosts = await Tweet.find();
+        console.log("likedPosts", likedPosts);
+
+        return res.status(200).json({
+            success: true,
+            message: "Fetched all Tweets liked by loggedIn User!",
+            likedPosts,
+        });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error!",
+        });
+    }
+}
 
 // RE-Tweet Functionality
+
+// retweetTweet
+export const retweetTweet = async (req, res) => {
+    try {
+        const tweetId = req.params.tweetId;
+        const userId = req.user._id;
+
+        const tweet = await Tweet.findById(tweetId);
+        if (!tweet) {
+            return res.status(400).json({
+                success: false,
+                message: "Tweet Not Found!",
+            });
+        }
+
+        if (tweet.retweet.includes(userId)) {
+            return res.status(400).json({
+                success: false,
+                message: "Already Retweeted!"
+            });
+        }
+
+        tweet.retweet.push(userId);
+        await tweet.save();
+
+        return res.status(201).json({
+            success: true,
+            message: "Tweet Retweeted Successfully!",
+            tweet,
+        });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error!",
+        });
+    }
+}
+
