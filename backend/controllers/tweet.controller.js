@@ -376,3 +376,65 @@ export const retweetTweet = async (req, res) => {
     }
 }
 
+// undoRetweetTweet
+export const undoRetweetTweet = async (req, res) => {
+    try {
+        const tweetId = req.params.tweetId;
+        const userId = req.user._id;
+
+        const tweet = await Tweet.findById(tweetId);
+        if (!tweet) {
+            return res.status(400).json({
+                success: false,
+                message: "Tweet Not Found!",
+            });
+        }
+
+        if (tweet.retweet.includes(userId)) {
+            // undo retweet
+            await Tweet.findByIdAndUpdate(tweetId, { $pull: { retweet: userId } }, { new: true });
+
+            return res.status(201).json({
+                success: true,
+                message: "Undo Retweeted a tweet Successfully!",
+            });
+
+        }
+
+
+
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error!",
+        });
+    }
+}
+
+// fetchRetweetedTweetsByUserId
+export const fetchRetweetedTweetsByUserId = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+
+        const retweets = await Tweet.find({ retweet: { $in: userId } });
+        // const retweets = await Tweet.find({ retweet: userId });
+
+        return res.status(200).json({
+            success: true,
+            message: "Fetched All Retweets of a User!",
+            retweets,
+        });
+
+
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error!",
+        });
+    }
+}
+
