@@ -77,6 +77,13 @@ export const deleteComment = async (req, res) => {
 
         const tweet = await Tweet.findById(comment.tweetId);
 
+        if (!tweet) {
+            return res.status(400).json({
+                success: false,
+                message: "Tweet Not Found!",
+            });
+        }
+
         if (tweet) {
             tweet.comments = tweet.comments.filter((id) => id.toString() !== commentId.toString());
             await tweet.save();
@@ -137,24 +144,36 @@ export const updateComment = async (req, res) => {
 export const commentLikeUnlike = async (req, res) => {
     try {
         const commentId = req.params.commentId;
-        const { comment } = req.body;
+        const userId = req.user._id;
 
-        const existingComment = await Comment.findById(commentId);
-        if (!existingComment) {
+        const comment = await Comment.findById(commentId);
+        if (!comment) {
             return res.status(400).json({
                 success: false,
                 message: "Comment Not Found!",
             });
         }
 
-        const updatedComment = await Comment.findByIdAndUpdate(commentId, { $set: { comment } }, { new: true });
+        if (comment.commentLikes.includes(userId)) {
+            // unlike comment
+            await Comment.findByIdAndUpdate(commentId, { $pull: { commentLikes: userId } }, { new: true });
+
+            return res.status(200).json({
+                success: true,
+                message: "Comment Unliked!",
+            });
+        } else {
+            // like comment
+            await Comment.findByIdAndUpdate(commentId, { $push: { commentLikes: userId } }, { new: true });
+
+            return res.status(200).json({
+                success: true,
+                message: "Comment liked!",
+            });
+
+        }
 
 
-        return res.status(200).json({
-            success: true,
-            message: "Comment Updated!",
-            comment: updateComment,
-        });
 
 
 
