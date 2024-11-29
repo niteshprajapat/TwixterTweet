@@ -54,7 +54,7 @@ export const createComment = async (req, res) => {
 export const deleteComment = async (req, res) => {
     try {
         const commentId = req.params.commentId;
-        const userId = req.user_id;
+        const userId = req.user._id;
 
         const comment = await Comment.findById(commentId);
         if (!comment) {
@@ -72,19 +72,19 @@ export const deleteComment = async (req, res) => {
             });
         }
 
+        await Comment.findByIdAndDelete(commentId);
 
 
+        const tweet = await Tweet.findById(comment.tweetId);
 
-
-
-
-
-
+        if (tweet) {
+            tweet.comments = tweet.comments.filter((id) => id.toString() !== commentId.toString());
+            await tweet.save();
+        }
 
         return res.status(200).json({
             success: true,
-            message: "Comment Added!",
-            comment: newComment,
+            message: "Comment Deleted!",
         });
 
 
