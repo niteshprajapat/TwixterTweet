@@ -97,3 +97,73 @@ export const deleteComment = async (req, res) => {
         });
     }
 }
+
+// updateComment
+export const updateComment = async (req, res) => {
+    try {
+        const commentId = req.params.commentId;
+        const { comment } = req.body;
+
+        const existingComment = await Comment.findById(commentId);
+        if (!existingComment) {
+            return res.status(400).json({
+                success: false,
+                message: "Comment Not Found!",
+            });
+        }
+
+        const updatedComment = await Comment.findByIdAndUpdate(commentId, { $set: { comment } }, { new: true });
+
+
+        return res.status(200).json({
+            success: true,
+            message: "Comment Updated!",
+            comment: updateComment,
+        });
+
+
+
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error!",
+        });
+    }
+}
+
+// commentLikeUnlike
+export const commentLikeUnlike = async (req, res) => {
+    try {
+        const commentId = req.params.commentId;
+        const { comment } = req.body;
+
+        const existingComment = await Comment.findById(commentId);
+        if (!existingComment) {
+            return res.status(400).json({
+                success: false,
+                message: "Comment Not Found!",
+            });
+        }
+
+        const updatedComment = await Comment.findByIdAndUpdate(commentId, { $set: { comment } }, { new: true });
+
+
+        return res.status(200).json({
+            success: true,
+            message: "Comment Updated!",
+            comment: updateComment,
+        });
+
+
+
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error!",
+        });
+    }
+}
