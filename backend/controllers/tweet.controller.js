@@ -438,3 +438,30 @@ export const fetchRetweetedTweetsByUserId = async (req, res) => {
     }
 }
 
+// fetchAllUsersRetweetsTweetsByTweetId
+export const fetchAllUsersRetweetsTweetsByTweetId = async (req, res) => {
+    try {
+        const tweetId = req.params.tweetId;
+
+        const tweets = await Tweet.findById(tweetId).populate({
+            path: "retweet",
+            select: "-password"
+        });
+
+        return res.status(200).json({
+            success: true,
+            message: "Fetched All Users that Retweets a tweet",
+            tweets,
+        });
+
+
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error!",
+        });
+    }
+}
+
