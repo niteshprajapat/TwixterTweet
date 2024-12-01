@@ -9,6 +9,7 @@ import authRoutes from './routes/auth.routes.js'
 import userRoutes from './routes/user.routes.js'
 import tweetRoutes from './routes/tweet.routes.js'
 import commentRoutes from './routes/comment.routes.js'
+import messageRoutes from './routes/message.routes.js'
 import './utils/passportSetup.js';
 import { cloudinaryConfig } from './config/cloudinary.js';
 
@@ -55,6 +56,7 @@ app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/tweet', tweetRoutes);
 app.use('/api/v1/comment', commentRoutes);
+app.use('/api/v1/message', messageRoutes);
 
 
 
