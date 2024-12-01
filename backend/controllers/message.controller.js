@@ -134,9 +134,48 @@ export const updateMessage = async (req, res) => {
             updateMessage,
         });
 
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error!",
+        });
+    }
+}
+
+// deleteMessage
+export const deleteMessage = async (req, res) => {
+    try {
+        const messageId = req.params.id;
+
+        const message = await Message.findById(messageId);
+        if (!message) {
+            return res.status(404).json({
+                success: false,
+                message: "Message not found",
+            });
+        }
+
+        const conversation = await Conversation.findOne({ messages: { $in: [messageId] } });
+
+        if (!conversation) {
+            return res.status(404).json({
+                success: false,
+                message: "Conversation not found",
+            });
+        }
 
 
+        if (conversation) {
+            conversation.messages = conversation.messages.filter((msg) => msg.toString() !== messageId.toString());
+            await conversation.save();
+        }
+        await Message.findByIdAndDelete(messageId);
 
+        return res.status(200).json({
+            success: true,
+            message: "Message Deleted",
+        });
 
     } catch (error) {
         console.log(error);
