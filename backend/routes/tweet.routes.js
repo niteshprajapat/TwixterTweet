@@ -2,7 +2,7 @@ import express from 'express';
 const router = express.Router();
 
 import { isAuthenticated } from '../middlewares/authMiddleware.js';
-import { bookmarkTweet, createTweet, deleteTweet, fetchAllTweets, fetchRetweetedTweetsByUserId, followingTweetsOnly, likedTweetByUserId, likeUnlikeTweet, retweetTweet, undoRetweetTweet, updateTweet } from '../controllers/tweet.controller.js';
+import { bookmarkTweet, createTweet, deleteTweet, fetchAllTweets, fetchAllUsersRetweetsTweetsByTweetId, fetchRetweetedTweetsByUserId, followingTweetsOnly, likedTweetByUserId, likeUnlikeTweet, retweetTweet, undoRetweetTweet, updateTweet } from '../controllers/tweet.controller.js';
 
 
 
@@ -28,6 +28,9 @@ router.get("/undo-retweet/:tweetId", isAuthenticated, undoRetweetTweet);
 
 // get all tweets retweets by a userId
 router.get("/retweets/user/:userId", isAuthenticated, fetchRetweetedTweetsByUserId);
+
+// get all users retweeted a tweet by TweetId
+router.get("/retweets/users/:tweetId", isAuthenticated, fetchAllUsersRetweetsTweetsByTweetId);
 
 export default router;
 
