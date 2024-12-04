@@ -24,15 +24,15 @@ import axios from 'axios';
 
 
 const Auth = () => {
-    const [fullname, setFullname] = useState("");
-    const [username, setUsername] = useState("");
+    const [fullName, setFullName] = useState("");
+    const [userName, setUserName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
 
     const { mutate: registerMutate, isError, error, isPending } = useMutation({
-        mutationFn: async ({ }) => {
-            const response = await axios.post(routes.REGISTER, { fullname, username, email, password }, {
+        mutationFn: async (registerData) => {
+            const response = await axios.post(routes.REGISTER, registerData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -73,16 +73,16 @@ const Auth = () => {
                             <div className="space-y-1">
                                 <Label htmlFor="name">Fullname</Label>
                                 <Input
-                                    value={fullname}
-                                    onChange={(e) => setFullname(e.target.value)}
+                                    value={fullName}
+                                    onChange={(e) => setFullName(e.target.value)}
                                     type="text"
                                 />
                             </div>
                             <div className="space-y-1">
                                 <Label htmlFor="username">Username</Label>
                                 <Input
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
+                                    value={userName}
+                                    onChange={(e) => setUserName(e.target.value)}
                                     type="text"
                                 />
                             </div>
@@ -104,7 +104,7 @@ const Auth = () => {
                             </div>
                         </CardContent>
                         <CardFooter>
-                            <Button onClick={() => registerMutate(fullname, username, email, password)}>Save changes</Button>
+                            <Button onClick={() => registerMutate({ fullName, userName, email, password })}>Save changes</Button>
                         </CardFooter>
                     </Card>
                 </TabsContent>
