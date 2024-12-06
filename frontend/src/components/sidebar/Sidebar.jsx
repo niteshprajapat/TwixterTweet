@@ -1,7 +1,39 @@
-import { Bell, Home, MessageCircle, Search, User2 } from 'lucide-react'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { Bell, Dot, Ellipsis, Home, MessageCircle, Search, User2 } from 'lucide-react'
 import React from 'react'
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { Button } from '../ui/button';
+import axios from 'axios';
+import { routes } from '@/routes/route';
+import { getCookie } from '@/utils/getCookie';
 
 const Sidebar = () => {
+
+    const cookiesData = getCookie("twixter");
+
+    const { data: authUser } = useQuery({ queryKey: ["authUser"] });
+    console.log("THIS IS AUTH =>> ", authUser);
+
+
+    const { mutate: logoutMutate, isError, error, isPending } = useMutation({
+        mutationFn: async () => {
+            const response = await axios.post(routes.LOGOUT, {}, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer ' + cookiesData,
+                },
+                withCredentials: true,
+            });
+
+            const data = await response.data;
+            return data;
+        },
+
+    });
+
+
+
     return (
         <div className='h-screen p-5 border-r flex flex-col justify-between '>
             <div className='flex flex-col  gap-5 '>
@@ -30,7 +62,31 @@ const Sidebar = () => {
                 </div>
             </div>
 
-            <div className='cursor-pointer bg-white text-center hover:bg-white/85  py-3 px-5 rounded-full'>
+            <div className='cursor-pointer text-black  text-center hover:bg-zinc-900  py-2 px-3 rounded-full flex justify-between items-center gap-4'>
+
+                <div className='flex items-center gap-3'>
+                    <Avatar>
+                        <AvatarImage src={authUser?.avatar} alt="avatar" />
+                        <AvatarFallback>{authUser?.userName?.[0]}</AvatarFallback>
+                    </Avatar>
+
+                    <div className='text-start'>
+                        <p className='text-white font-semibold'>{authUser?.fullName}</p>
+                        <span className='text-zinc-600'>@{authUser?.userName}</span>
+                    </div>
+
+                </div>
+                <div>
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <Ellipsis className='text-white' />
+                        </PopoverTrigger>
+
+                        <PopoverContent className="cursor-pointer hover:bg-zinc-900 mb-5 h-10 w-[200px] flex justify-center items-center bg-black text-white/80">
+                            <span onClick={() => logoutMutate()} className='font-bold '>Log Out @{authUser?.userName}</span>
+                        </PopoverContent>
+                    </Popover>
+                </div>
 
             </div>
         </div>
