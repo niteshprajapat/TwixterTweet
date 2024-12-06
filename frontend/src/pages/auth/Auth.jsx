@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-
-
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -18,9 +16,12 @@ import {
     TabsList,
     TabsTrigger,
 } from "@/components/ui/tabs"
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { routes } from '@/routes/route';
 import axios from 'axios';
+import { toast } from 'sonner';
+
+import Cookies from 'universal-cookie';
 
 
 const Auth = () => {
@@ -29,6 +30,12 @@ const Auth = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const [loginUserData, setLoginUserData] = useState("");
+    const [loginPassword, setLoginPassword] = useState("");
+
+    const queryClient = useQueryClient();
+
+    const cookies = new Cookies();
 
     const { mutate: registerMutate, isError, error, isPending } = useMutation({
         mutationFn: async (registerData) => {
@@ -51,6 +58,32 @@ const Auth = () => {
     });
 
 
+    const { mutate: loginMutate } = useMutation({
+        mutationFn: async (loginData) => {
+            const response = await axios.post(routes.LOGIN, { userData: loginData.loginUserData, password: loginData.loginPassword }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                withCredentials: true,
+            });
+
+            const data = await response.data;
+            return data;
+        },
+        onSuccess: (data) => {
+            console.log("LOGINDARTA", data);
+            toast.success(data?.message);
+
+            cookies.set("twixter", data?.token);
+
+            queryClient.invalidateQueries({ queryKey: ["authUser"] });
+
+        },
+        onError: (error) => {
+            console.log(error);
+            toast.error(error?.response?.data?.message);
+        }
+    })
 
 
     return (
@@ -104,7 +137,7 @@ const Auth = () => {
                             </div>
                         </CardContent>
                         <CardFooter>
-                            <Button onClick={() => registerMutate({ fullName, userName, email, password })}>Save changes</Button>
+                            <Button onClick={() => registerMutate({ fullName, userName, email, password })}>Register Now</Button>
                         </CardFooter>
                     </Card>
                 </TabsContent>
@@ -119,15 +152,23 @@ const Auth = () => {
                         <CardContent className="space-y-2">
                             <div className="space-y-1">
                                 <Label htmlFor="current">Username or Email</Label>
-                                <Input id="current" type="text" />
+                                <Input
+                                    value={loginUserData}
+                                    onChange={(e) => setLoginUserData(e.target.value)}
+                                    type="text"
+                                />
                             </div>
                             <div className="space-y-1">
                                 <Label htmlFor="new">Password</Label>
-                                <Input id="new" type="password" />
+                                <Input
+                                    value={loginPassword}
+                                    onChange={(e) => setLoginPassword(e.target.value)}
+                                    type="password"
+                                />
                             </div>
                         </CardContent>
                         <CardFooter>
-                            <Button>Save password</Button>
+                            <Button onClick={() => loginMutate({ loginUserData, loginPassword })}>Login Now</Button>
                         </CardFooter>
                     </Card>
                 </TabsContent>
