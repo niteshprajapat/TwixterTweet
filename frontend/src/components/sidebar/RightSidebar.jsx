@@ -2,7 +2,9 @@ import React from 'react'
 
 const RightSidebar = () => {
     return (
-        <div>RightSidebar</div>
+        <div className='h-screen p-5 border-l flex flex-col justify-between'>
+            s
+        </div>
     )
 }
 
