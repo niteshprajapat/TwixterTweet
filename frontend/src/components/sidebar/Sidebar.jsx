@@ -1,14 +1,17 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { Bell, Dot, Ellipsis, Home, MessageCircle, Search, User2 } from 'lucide-react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Bell, Ellipsis, Home, MessageCircle, Search, User2 } from 'lucide-react'
 import React from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { Button } from '../ui/button';
 import axios from 'axios';
 import { routes } from '@/routes/route';
 import { getCookie } from '@/utils/getCookie';
+import Cookies from 'universal-cookie';
+import { Link, useLocation, useParams } from 'react-router-dom';
 
 const Sidebar = () => {
+    const cookies = new Cookies();
+    const queryClient = useQueryClient();
 
     const cookiesData = getCookie("twixter");
 
@@ -27,6 +30,12 @@ const Sidebar = () => {
             });
 
             const data = await response.data;
+
+            cookies.remove("twixter");
+            queryClient.invalidateQueries({ queryKey: ["authUser"] });
+            window.location.reload();
+
+
             return data;
         },
 
@@ -53,10 +62,10 @@ const Sidebar = () => {
                     <MessageCircle />
                     <span>Messages</span>
                 </div>
-                <div className='flex items-center gap-4 cursor-pointer hover:bg-zinc-900  py-3 px-5 rounded-full'>
+                <Link to={`/profile/${authUser?._id}`} className='flex items-center gap-4 cursor-pointer hover:bg-zinc-900  py-3 px-5 rounded-full'>
                     <User2 />
                     <span>Profile</span>
-                </div>
+                </Link>
                 <div className='cursor-pointer bg-white text-center hover:bg-white/85  py-3 px-5 rounded-full'>
                     <span className='font-semibold text-black'>Post</span>
                 </div>
