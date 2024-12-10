@@ -29,7 +29,7 @@ const Profile = () => {
     const { data: tweetsByUserId, isLoading, isError, error } = useQuery({
         queryKey: ["tweetByUserId"],
         queryFn: async () => {
-            const response = await axios.get(`${routes.TWEETBYUSERID}/${authUser?._id}`, {
+            const response = await axios.get(`${routes.tweetByUserID}/${authUser?._id}`, {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: 'Bearer ' + cookiesData,
@@ -45,9 +45,28 @@ const Profile = () => {
     console.log("tweetsByUserId", tweetsByUserId);
 
 
+    const { data: tweetsLikedByUserID } = useQuery({
+        queryKey: ["tweetLikedByUserID"],
+        queryFn: async () => {
+            const response = await axios.get(`${routes.tweetLikedByUserID}/${authUser?._id}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer ' + cookiesData,
+                },
+                withCredentials: true,
+            });
+
+
+            const data = await response.data.likedPosts;
+            return data;
+        }
+    })
+
+
+
     const [currentData, setCurrentData] = useState("posts");
 
-    console.log("tweetsByUserId", tweetsByUserId);
+    console.log("tweetsLikedByUserID", tweetsLikedByUserID);
 
 
     return (
@@ -118,7 +137,19 @@ const Profile = () => {
                                 ))
                             }
                         </div>
-                    ) : ("")
+                    ) : (
+                        <div>
+                            {
+                                tweetsLikedByUserID && tweetsLikedByUserID?.map((likedTweet) => (
+                                    <div key={likedTweet?._id}>
+                                        {/* New Component for this */}
+
+                                        {/* <TweetIndividual key={likedTweet?._id} tweet={likedTweet} /> */}
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    )
                 }
 
 
