@@ -1,14 +1,15 @@
 const BASE_CASE = "http://127.0.0.1:5000/api/v1"
 
 export const routes = {
-    REGISTER: `${BASE_CASE}/auth/register`,
-    LOGIN: `${BASE_CASE}/auth/login`,
-    LOGOUT: `${BASE_CASE}/auth/logout`,
-    MEPROFILE: `${BASE_CASE}/user/me`,
+    register: `${BASE_CASE}/auth/register`,
+    login: `${BASE_CASE}/auth/login`,
+    logout: `${BASE_CASE}/auth/logout`,
+    meProfile: `${BASE_CASE}/user/me`,
 
 
     // tweets routes
 
-    TWEETBYUSERID: `${BASE_CASE}/tweet/tweetsByUserId`, // /:userId
+    tweetByUserID: `${BASE_CASE}/tweet/tweetsByUserId`, // /:userId
+    tweetLikedByUserID: `${BASE_CASE}/tweet/likedTweetByUserId`, // /:userId
 }
 
