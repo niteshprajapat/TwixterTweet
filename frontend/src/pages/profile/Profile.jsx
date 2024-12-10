@@ -7,6 +7,7 @@ import React, { useState } from 'react'
 import Cookies from 'universal-cookie';
 import { format } from 'date-fns';
 import { Button } from '@/components/ui/button';
+import TweetIndividual from '@/components/tweet/TweetIndividual';
 
 
 const Profile = () => {
@@ -50,7 +51,7 @@ const Profile = () => {
 
 
     return (
-        <div className='flex flex-col'>
+        <div className='flex flex-col max-h-screen overflow-auto'>
             <div className='bg-[#121314]'>
                 <h1>{authUser?.fullName}</h1>
                 <span>{tweetsByUserId?.length} {tweetsByUserId?.length > 1 ? "Posts" : "Post"}</span>
@@ -111,8 +112,8 @@ const Profile = () => {
                         <div>
                             {
                                 tweetsByUserId && tweetsByUserId?.map((tweet) => (
-                                    <div>
-                                        <p>{tweet?.tweetContent}</p>
+                                    <div key={tweet?._id}>
+                                        <TweetIndividual key={tweet?._id} tweet={tweet} />
                                     </div>
                                 ))
                             }
