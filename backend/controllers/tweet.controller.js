@@ -2,6 +2,29 @@ import Notification from "../models/notification.model.js";
 import Tweet from "../models/tweet.model.js";
 import User from "../models/user.model.js";
 
+// fetchTweetByUserId
+export const fetchTweetByUserId = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+
+        const tweets = await Tweet.find({ userId: userId }).sort({ createdAt: -1 });
+
+
+        return res.status(201).json({
+            success: true,
+            message: "Fetched All Tweets Successfully!",
+            tweets,
+        });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error!",
+        });
+    }
+}
+
 // fetchAllTweets
 export const fetchAllTweets = async (req, res) => {
     try {
