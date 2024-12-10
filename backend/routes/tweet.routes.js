@@ -2,10 +2,11 @@ import express from 'express';
 const router = express.Router();
 
 import { isAuthenticated } from '../middlewares/authMiddleware.js';
-import { bookmarkTweet, createTweet, deleteTweet, fetchAllTweets, fetchAllUsersRetweetsTweetsByTweetId, fetchRetweetedTweetsByUserId, followingTweetsOnly, likedTweetByUserId, likeUnlikeTweet, retweetTweet, undoRetweetTweet, updateTweet } from '../controllers/tweet.controller.js';
+import { bookmarkTweet, createTweet, deleteTweet, fetchAllTweets, fetchAllUsersRetweetsTweetsByTweetId, fetchRetweetedTweetsByUserId, fetchTweetByUserId, followingTweetsOnly, likedTweetByUserId, likeUnlikeTweet, retweetTweet, undoRetweetTweet, updateTweet } from '../controllers/tweet.controller.js';
 
 
 
+router.get("/tweetsByUserId/:userId", isAuthenticated, fetchTweetByUserId);
 router.get("/fetchAllTweets", isAuthenticated, fetchAllTweets);
 router.post("/createTweet", isAuthenticated, createTweet);
 router.delete("/deleteTweet/:id", isAuthenticated, deleteTweet);
