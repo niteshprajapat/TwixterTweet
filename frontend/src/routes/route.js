@@ -5,5 +5,10 @@ export const routes = {
     LOGIN: `${BASE_CASE}/auth/login`,
     LOGOUT: `${BASE_CASE}/auth/logout`,
     MEPROFILE: `${BASE_CASE}/user/me`,
+
+
+    // tweets routes
+
+    TWEETBYUSERID: `${BASE_CASE}/tweet/tweetsByUserId`, // /:userId
 }
 
