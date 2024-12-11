@@ -7,7 +7,10 @@ export const fetchTweetByUserId = async (req, res) => {
     try {
         const userId = req.params.userId;
 
-        const tweets = await Tweet.find({ userId: userId }).sort({ createdAt: -1 });
+        const tweets = await Tweet.find({ userId: userId }).sort({ createdAt: -1 }).populate({
+            path: "userId",
+            select: "avatar userName fullName",
+        });
 
 
         return res.status(201).json({
@@ -28,7 +31,10 @@ export const fetchTweetByUserId = async (req, res) => {
 // fetchAllTweets
 export const fetchAllTweets = async (req, res) => {
     try {
-        const tweets = await Tweet.find({}).sort({ createdAt: -1 });
+        const tweets = await Tweet.find({}).sort({ createdAt: -1 }).populate({
+            path: "userId",
+            select: "avatar userName fullName",
+        });
 
         return res.status(201).json({
             success: true,
@@ -339,7 +345,10 @@ export const likedTweetByUserId = async (req, res) => {
     try {
         const userId = req.params.userId;
 
-        const likedPosts = await Tweet.find({ likes: { $in: userId } }).sort({ createdAt: -1 });
+        const likedPosts = await Tweet.find({ likes: { $in: userId } }).sort({ createdAt: -1 }).populate({
+            path: "userId",
+            select: "avatar userName fullName",
+        });
         // const likedPosts = await Tweet.find();
         console.log("likedPosts", likedPosts);
 
