@@ -5,7 +5,7 @@ import { Bookmark, Heart, MessageCircle, Repeat2, Share, Trash2 } from 'lucide-r
 import React from 'react'
 
 const TweetData = ({ tweet }) => {
-    const isLiked = true;
+    const isLiked = false;
     const isBookmarked = true;
 
     console.log("TweetData", tweet);
@@ -63,7 +63,7 @@ const TweetData = ({ tweet }) => {
                                 <span>{tweet?.likes?.length}</span>
                             </div>
                             <div>
-                                {isBookmarked ? <Bookmark color='pink' size={17} /> : <Bookmark size={17} />}
+                                {isBookmarked ? <Bookmark size={17} /> : <Bookmark size={17} />}
                             </div>
                             <div className='flex items-center gap-1'>
                                 <Share size={17} />
