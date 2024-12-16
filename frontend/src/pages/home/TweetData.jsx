@@ -1,12 +1,23 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { useMutation } from '@tanstack/react-query';
+import { routes } from '@/routes/route';
+import { getCookie } from '@/utils/getCookie';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 import { format } from 'date-fns';
 import { Bookmark, Heart, MessageCircle, Repeat2, Share, Trash2 } from 'lucide-react'
 import React from 'react'
+import { toast } from 'sonner';
+import Cookies from 'universal-cookie';
 
 const TweetData = ({ tweet }) => {
-    const isLiked = false;
     const isBookmarked = true;
+    const { data: authUser } = useQuery({ queryKey: ["authUser"] });
+
+
+    const cookies = new Cookies();
+    const queryClient = useQueryClient();
+
+    const cookiesData = getCookie("twixter");
 
     console.log("TweetData", tweet);
 
@@ -15,8 +26,32 @@ const TweetData = ({ tweet }) => {
         return isoDate;
     }
 
+    const isLiked = tweet?.likes?.includes(authUser?._id?.toString());
 
-    const { mutate: likedUnlikeMutate } = useMutation({ mutationKey: ["likedUnlikeMutate"] });
+
+    const { mutate: likedUnlikeMutate } = useMutation({
+        mutationKey: ["likedUnlikeMutate"],
+        mutationFn: async (tweetID) => {
+            const response = await axios.post(`${routes.likeUnlikeTweetByTweetID}/${tweetID}`, {}, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer ' + cookiesData,
+                },
+                withCredentials: true,
+            });
+
+            const data = await response.data;
+            return data;
+        },
+        onSuccess: (data) => {
+            console.log("dataLIKED", data);
+            queryClient.invalidateQueries({ queryKey: ["fetchAllTweets"] });
+            queryClient.invalidateQueries({ queryKey: ["tweetLikedByUserID"] });
+
+            toast.success(data?.message);
+
+        }
+    });
 
     return (
         <div className='bg-black hover:bg-zinc-950 p-5 border border-zinc-800 cursor-pointer'>
