@@ -8,6 +8,10 @@ import Cookies from 'universal-cookie';
 import { format } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import TweetIndividual from '@/components/tweet/TweetIndividual';
+import TweetLikedByYou from '@/components/tweet/TweetLikedByYou';
+import { useParams } from 'react-router-dom';
+import EditProfile from './EditProfile';
+import { space } from 'postcss/lib/list';
 
 
 const Profile = () => {
@@ -18,6 +22,7 @@ const Profile = () => {
 
     const cookiesData = getCookie("twixter");
 
+    const { userId } = useParams();
 
     const formatDate = (date) => {
         const dateData = new Date(date)
@@ -29,7 +34,7 @@ const Profile = () => {
     const { data: tweetsByUserId, isLoading, isError, error } = useQuery({
         queryKey: ["tweetByUserId"],
         queryFn: async () => {
-            const response = await axios.get(`${routes.tweetByUserID}/${authUser?._id}`, {
+            const response = await axios.get(`${routes.tweetByUserID}/${userId}`, {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: 'Bearer ' + cookiesData,
@@ -48,7 +53,7 @@ const Profile = () => {
     const { data: tweetsLikedByUserID } = useQuery({
         queryKey: ["tweetLikedByUserID"],
         queryFn: async () => {
-            const response = await axios.get(`${routes.tweetLikedByUserID}/${authUser?._id}`, {
+            const response = await axios.get(`${routes.tweetLikedByUserID}/${userId}`, {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: 'Bearer ' + cookiesData,
@@ -86,9 +91,15 @@ const Profile = () => {
                 </div>
 
                 <div className='bg-black h-60 w-full p-5 pt-20'>
-                    <div className=''>
-                        <h1>{authUser?.fullName}</h1>
-                        <span>@{authUser?.userName}</span>
+                    <div className='flex justify-between items-center'>
+                        <div>
+                            <h1>{authUser?.fullName}</h1>
+                            <span>@{authUser?.userName}</span>
+                        </div>
+
+                        <EditProfile />
+
+                        {/* <Button className="rounded-full bg-black border border-zinc-700">Edit Profile</Button> */}
                     </div>
 
                     <div>
@@ -130,23 +141,39 @@ const Profile = () => {
                     currentData === "posts" ? (
                         <div>
                             {
-                                tweetsByUserId && tweetsByUserId?.map((tweet) => (
-                                    <div key={tweet?._id}>
-                                        <TweetIndividual key={tweet?._id} tweet={tweet} />
+                                tweetsByUserId?.length > 0 ? (
+                                    tweetsByUserId && tweetsByUserId?.map((tweet) => (
+                                        <div key={tweet?._id}>
+                                            <TweetIndividual key={tweet?._id} tweet={tweet} />
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className='flex  justify-center items-center py-10'>
+                                        <span className='text-zinc-600 font-bold text-2xl'>No Tweets Yet</span>
                                     </div>
-                                ))
+                                )
+
+
+
+
                             }
                         </div>
                     ) : (
                         <div>
                             {
-                                tweetsLikedByUserID && tweetsLikedByUserID?.map((likedTweet) => (
-                                    <div key={likedTweet?._id}>
-                                        {/* New Component for this */}
-
-                                        {/* <TweetIndividual key={likedTweet?._id} tweet={likedTweet} /> */}
+                                tweetsLikedByUserID?.length > 0 ? (
+                                    tweetsLikedByUserID && tweetsLikedByUserID?.map((likedTweet) => (
+                                        <div key={likedTweet?._id}>
+                                            {/* New Component for this */}
+                                            <TweetLikedByYou key={likedTweet?._id} tweet={likedTweet} />
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className='flex  justify-center items-center py-10'>
+                                        <span className='text-zinc-600 font-bold text-2xl'>No Liked Tweets Yet</span>
                                     </div>
-                                ))
+                                )
+
                             }
                         </div>
                     )
