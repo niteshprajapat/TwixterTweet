@@ -7,6 +7,7 @@ import axios from 'axios';
 import { routes } from '@/routes/route';
 import Cookies from 'universal-cookie';
 import { getCookie } from '@/utils/getCookie';
+import { toast } from 'sonner';
 
 const TweetIndividual = ({ tweet }) => {
 
@@ -49,10 +50,37 @@ const TweetIndividual = ({ tweet }) => {
         onSuccess: (data) => {
             console.log("dataLIKED", data);
             queryClient.invalidateQueries({ queryKey: ["tweetByUserId"] });
+            queryClient.invalidateQueries({ queryKey: ["tweetLikedByUserID"] });
+            toast.success(data?.message);
+
         }
     });
 
+    const { mutate: deleteMutate, } = useMutation({
+        mutationFn: async (tweetID) => {
+            const response = await axios.delete(`${routes.deleteTweetByTweetID}/${tweetID}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer ' + cookiesData,
+                },
+                withCredentials: true,
+            });
 
+            const data = await response.data;
+            return data;
+        },
+        onSuccess: (data) => {
+            console.log("TWEETDELEET", data);
+            toast.success(data?.message);
+            queryClient.invalidateQueries({ queryKey: ["tweetByUserId"] });
+            queryClient.invalidateQueries({ queryKey: ["fetchAllTweets"] });
+            queryClient.invalidateQueries({ queryKey: ["tweetLikedByUserID"] });
+        },
+        onError: (error) => {
+            toast.error(error?.response?.data?.message);
+
+        }
+    })
 
 
     const isLiked = tweet?.likes?.includes(authUser?._id?.toString());
@@ -121,9 +149,13 @@ const TweetIndividual = ({ tweet }) => {
 
                 </div>
 
-                <div>
-                    <Trash2 />
-                </div>
+                {
+                    authUser?._id?.toString() === tweet?.userId?._id?.toString() && (
+                        <div>
+                            <Trash2 onClick={() => deleteMutate(tweet?._id)} />
+                        </div>
+                    )
+                }
             </div>
 
 
