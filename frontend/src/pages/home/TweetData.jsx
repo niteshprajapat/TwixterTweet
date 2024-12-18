@@ -6,6 +6,7 @@ import axios from 'axios';
 import { format } from 'date-fns';
 import { Bookmark, Heart, MessageCircle, Repeat2, Share, Trash2 } from 'lucide-react'
 import React from 'react'
+import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import Cookies from 'universal-cookie';
 
@@ -53,6 +54,30 @@ const TweetData = ({ tweet }) => {
         }
     });
 
+
+    const { mutate: deleteMutate, } = useMutation({
+        mutationFn: async (tweetID) => {
+            const response = await axios.delete(`${routes.deleteTweetByTweetID}/${tweetID}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer ' + cookiesData,
+                },
+                withCredentials: true,
+            });
+
+            const data = await response.data;
+            return data;
+        },
+        onSuccess: (data) => {
+            console.log("TWEETDELEET", data);
+            toast.success(data?.message);
+            queryClient.invalidateQueries({ queryKey: ["fetchAllTweets"] });
+        },
+        onError: (error) => {
+            toast.error(error?.response?.data?.message);
+        }
+    })
+
     return (
         <div className='bg-black hover:bg-zinc-950 p-5 border border-zinc-800 cursor-pointer'>
 
@@ -62,10 +87,12 @@ const TweetData = ({ tweet }) => {
 
                 <div className='flex gap-5 w-full'>
 
-                    <Avatar>
-                        <AvatarImage src={tweet?.userId?.avatar} alt="avatar" />
-                        <AvatarFallback>{tweet?.userId?.fullName[0]}</AvatarFallback>
-                    </Avatar>
+                    <Link to={`/profile/${tweet?.userId?._id}`}>
+                        <Avatar>
+                            <AvatarImage src={tweet?.userId?.avatar} alt="avatar" />
+                            <AvatarFallback>{tweet?.userId?.fullName[0]}</AvatarFallback>
+                        </Avatar>
+                    </Link>
 
                     <div className='flex flex-col gap-2 w-full'>
                         <div className='flex items-center gap-1'>
@@ -78,7 +105,7 @@ const TweetData = ({ tweet }) => {
 
                         {
                             tweet?.tweetImage && (
-                                <img src={tweet?.tweetImage} alt={tweet?.tweetContent} className='w-full rounded-lg' />
+                                <img src={tweet?.tweetImage} alt={tweet?.tweetContent} className='w-full rounded-[20px] h-[250px] object-cover' />
                             )
                         }
 
@@ -113,9 +140,15 @@ const TweetData = ({ tweet }) => {
 
                 </div>
 
-                <div>
-                    <Trash2 />
-                </div>
+                {
+                    authUser?._id?.toString() === tweet?.userId?._id?.toString() && (
+                        <div>
+                            <Trash2 onClick={() => deleteMutate(tweet?._id)} />
+                        </div>
+                    )
+                }
+
+
             </div>
 
 
