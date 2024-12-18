@@ -39,7 +39,7 @@ const Auth = () => {
 
     const { mutate: registerMutate, isError, error, isPending } = useMutation({
         mutationFn: async (registerData) => {
-            const response = await axios.post(routes.REGISTER, registerData, {
+            const response = await axios.post(routes.register, registerData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -60,7 +60,7 @@ const Auth = () => {
 
     const { mutate: loginMutate } = useMutation({
         mutationFn: async (loginData) => {
-            const response = await axios.post(routes.LOGIN, { userData: loginData.loginUserData, password: loginData.loginPassword }, {
+            const response = await axios.post(routes.login, { userData: loginData.loginUserData, password: loginData.loginPassword }, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -87,7 +87,7 @@ const Auth = () => {
 
 
     return (
-        <div className='w-full h-screen bg-[#09090B] flex justify-center items-center'>
+        <div className='w-full h-screen bg-[#000] flex justify-center items-center'>
 
             <Tabs defaultValue="register" className="w-[400px]  ">
                 <TabsList className="grid w-full grid-cols-2 bg-[#09090B]">

@@ -109,10 +109,13 @@ const TweetData = ({ tweet }) => {
                         <p>{tweet?.tweetContent}</p>
 
                         {
-                            !tweet?.tweetImage?.includes(".mp4") ? (
-                                <img src={tweet?.tweetImage} alt={tweet?.tweetContent} className='w-full rounded-[20px] h-[250px] object-cover' />
-                            ) : (
-                                <video src={tweet?.tweetImage} alt={tweet?.tweetContent} className='w-full rounded-[20px] h-[450px] object-contain' controls />
+
+                            tweet?.tweetImage && (
+                                !tweet?.tweetImage?.includes(".mp4") ? (
+                                    <img src={tweet?.tweetImage} alt={tweet?.tweetContent} className='w-full rounded-[20px] h-[250px] object-cover' />
+                                ) : (
+                                    <video src={tweet?.tweetImage} alt={tweet?.tweetContent} className='w-full rounded-[20px] h-[400px] object-contain' controls muted />
+                                )
                             )
                         }
 

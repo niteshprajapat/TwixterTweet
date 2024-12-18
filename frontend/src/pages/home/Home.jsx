@@ -44,7 +44,6 @@ const Home = () => {
                     fetchAllTweets && fetchAllTweets?.map((tweet) => (
                         <div key={tweet?._id}>
                             <TweetData key={tweet?._id} tweet={tweet} />
-
                         </div>
                     ))
                 }
