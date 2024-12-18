@@ -14,6 +14,9 @@ const TweetData = ({ tweet }) => {
     const isBookmarked = true;
     const { data: authUser } = useQuery({ queryKey: ["authUser"] });
 
+    console.log("tweettweet", tweet);
+
+    console.log("tweettweet2", tweet?.tweetImage?.includes(".mp4"));
 
     const cookies = new Cookies();
     const queryClient = useQueryClient();
@@ -95,17 +98,21 @@ const TweetData = ({ tweet }) => {
                     </Link>
 
                     <div className='flex flex-col gap-2 w-full'>
-                        <div className='flex items-center gap-1'>
-                            <h1>{tweet?.userId?.fullName}</h1>
-                            <span>@{tweet?.userId?.userName}</span>
+                        <div className='flex items-center gap-2'>
+                            <Link to={`/profile/${tweet?.userId?._id}`} className='flex items-center gap-1'>
+                                <h1>{tweet?.userId?.fullName}</h1>
+                                <span>@{tweet?.userId?.userName}</span>
+                            </Link>
                             <span>{formattedDate(tweet?.createdAt)}</span>
                         </div>
 
                         <p>{tweet?.tweetContent}</p>
 
                         {
-                            tweet?.tweetImage && (
+                            !tweet?.tweetImage?.includes(".mp4") ? (
                                 <img src={tweet?.tweetImage} alt={tweet?.tweetContent} className='w-full rounded-[20px] h-[250px] object-cover' />
+                            ) : (
+                                <video src={tweet?.tweetImage} alt={tweet?.tweetContent} className='w-full rounded-[20px] h-[450px] object-contain' controls />
                             )
                         }
 
