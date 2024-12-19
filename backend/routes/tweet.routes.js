@@ -2,7 +2,7 @@ import express from 'express';
 const router = express.Router();
 
 import { isAuthenticated } from '../middlewares/authMiddleware.js';
-import { bookmarkTweet, createTweet, deleteTweet, fetchAllTweets, fetchAllUsersRetweetsTweetsByTweetId, fetchRetweetedTweetsByUserId, fetchTweetByUserId, followingTweetsOnly, likedTweetByUserId, likeUnlikeTweet, retweetTweet, undoRetweetTweet, updateTweet } from '../controllers/tweet.controller.js';
+import { bookmarkTweet, createTweet, deleteTweet, fetchAllTweets, fetchAllUsersRetweetsTweetsByTweetId, fetchRetweetedTweetsByUserId, fetchTweetByUserId, followingTweetsOnly, getAllBookmarkTweets, likedTweetByUserId, likeUnlikeTweet, retweetTweet, undoRetweetTweet, updateTweet } from '../controllers/tweet.controller.js';
 
 
 
@@ -13,6 +13,7 @@ router.delete("/deleteTweet/:id", isAuthenticated, deleteTweet);
 router.put("/updateTweet/:id", isAuthenticated, updateTweet);
 router.post("/likeUnlikeTweet/:id", isAuthenticated, likeUnlikeTweet);
 router.post("/bookmark-tweet/:tweetId", isAuthenticated, bookmarkTweet);
+router.get("/get-bookmark-tweets", isAuthenticated, getAllBookmarkTweets);
 router.get("/followingTweets", isAuthenticated, followingTweetsOnly);
 
 router.get("/likedTweetByUserId/:userId", isAuthenticated, likedTweetByUserId)
