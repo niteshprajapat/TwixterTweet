@@ -146,10 +146,11 @@ const Sidebar = () => {
 
     });
 
-
+    console.log("tweetImage", tweetImage);
 
     return (
-        <div className='h-screen p-5 border-r flex flex-col justify-between '>
+        // <div className='h-screen p-5  border-r  border-zinc-800 flex flex-col justify-between fixed w-[20%]'>
+        <div className='h-screen p-5    border-zinc-800 flex flex-col justify-between fixed w-[20%]'>
             <div className='flex flex-col  gap-5 '>
                 <Link to={"/"} className='flex items-center gap-4 cursor-pointer hover:bg-zinc-900  py-3 px-5 rounded-full'>
                     <Home />
@@ -203,7 +204,14 @@ const Sidebar = () => {
                             </div>
 
                             {
-                                filePreview && <img src={filePreview} alt="preview" className='rounded-lg h-[250px] w-full object-cover' />
+                                filePreview && (
+                                    !tweetImage?.includes(".mp4") ? (
+                                        <img src={filePreview} alt="preview" className='rounded-lg h-[250px] w-full object-cover' />
+                                    ) : (
+                                        <video src={filePreview} alt="preview" className='rounded-lg h-[250px] w-full object-cover' controls muted />
+                                    )
+                                )
+
                             }
 
 
