@@ -301,6 +301,44 @@ export const bookmarkTweet = async (req, res) => {
     }
 }
 
+// getAllBookmarkTweets
+export const getAllBookmarkTweets = async (req, res) => {
+    try {
+        const userId = req.user._id;
+
+        if (!userId) {
+            return res.status(404).json({
+                success: false,
+                message: "User Not Found!",
+            });
+        }
+
+        const bookmarks = await User.findById(userId).populate({
+            path: "bookmarkedTweet",
+            populate: {
+                path: "userId",
+                select: "-password"
+            },
+            select: "-password",
+        });
+
+
+
+        return res.status(200).json({
+            success: true,
+            message: "Fetched All Bookmarked! ",
+            bookmarks,
+        });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error!",
+        });
+    }
+}
+
 // followingTweetsOnly
 export const followingTweetsOnly = async (req, res) => {
     try {
