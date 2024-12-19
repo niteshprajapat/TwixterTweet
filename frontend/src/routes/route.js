@@ -6,13 +6,19 @@ export const routes = {
     logout: `${BASE_URL}/auth/logout`,
     meProfile: `${BASE_URL}/user/me`,
 
+    profileByUserId: `${BASE_URL}/user/profile`, // /:userId
+
+    uploadFile: `${BASE_URL}/user/uploadFile`,   //http://127.0.0.1:5000/api/v1/user/uploadFile
+
 
     // tweets routes
 
+    createTweet: `${BASE_URL}/tweet/createTweet`,
     fetchAllTweets: `${BASE_URL}/tweet/fetchAllTweets`,
 
     tweetByUserID: `${BASE_URL}/tweet/tweetsByUserId`, // /:userId
     tweetLikedByUserID: `${BASE_URL}/tweet/likedTweetByUserId`, // /:userId
-    likeUnlikeTweetByTweetID: `${BASE_URL}/tweet/likeUnlikeTweet` // /:tweetId 
+    likeUnlikeTweetByTweetID: `${BASE_URL}/tweet/likeUnlikeTweet`, // /:tweetId 
+    deleteTweetByTweetID: `${BASE_URL}/tweet/deleteTweet`, // /:tweetId
 }
 
