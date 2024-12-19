@@ -12,7 +12,7 @@ router.post("/createTweet", isAuthenticated, createTweet);
 router.delete("/deleteTweet/:id", isAuthenticated, deleteTweet);
 router.put("/updateTweet/:id", isAuthenticated, updateTweet);
 router.post("/likeUnlikeTweet/:id", isAuthenticated, likeUnlikeTweet);
-router.get("/bookmark-tweet/:tweetId", isAuthenticated, bookmarkTweet);
+router.post("/bookmark-tweet/:tweetId", isAuthenticated, bookmarkTweet);
 router.get("/followingTweets", isAuthenticated, followingTweetsOnly);
 
 router.get("/likedTweetByUserId/:userId", isAuthenticated, likedTweetByUserId)
