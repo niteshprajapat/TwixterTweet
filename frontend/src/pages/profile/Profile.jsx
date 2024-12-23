@@ -11,6 +11,7 @@ import TweetIndividual from '@/components/tweet/TweetIndividual';
 import TweetLikedByYou from '@/components/tweet/TweetLikedByYou';
 import { useParams } from 'react-router-dom';
 import EditProfile from './EditProfile';
+import TweetIndividualMedia from '@/components/tweet/TweetIndividualMedia';
 
 
 const Profile = () => {
@@ -196,12 +197,9 @@ const Profile = () => {
                                     </div>
                                 )
 
-
-
-
                             }
                         </div>
-                    ) : (
+                    ) : currentData === "likes" ? (
                         <div>
                             {
                                 authUser?._id?.toString() === userId?.toString() && (
@@ -218,6 +216,23 @@ const Profile = () => {
                                             <span className='text-zinc-600 font-bold text-2xl'>No Liked Tweets Yet</span>
                                         </div>
                                     )
+                                )
+
+                            }
+                        </div>
+                    ) : (
+                        <div className='grid grid-cols-3 gap-1'>
+                            {
+                                tweetsByUserId?.length > 0 ? (
+                                    tweetsByUserId && tweetsByUserId?.map((tweet) => (
+                                        <div key={tweet?._id} className=''>
+                                            <TweetIndividualMedia key={tweet?._id} tweet={tweet} />
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className='flex  justify-center items-center py-10 '>
+                                        <span className='text-zinc-600 font-bold text-2xl '>No Media Found!</span>
+                                    </div>
                                 )
 
                             }
