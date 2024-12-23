@@ -41,7 +41,6 @@ const Bookmarks = () => {
                         <div key={bookmarkTweet?._id} >
                             <BookmarkTweet bookmarktweet={bookmarkTweet} />
                         </div>
-
                     ))
 
                 ) : (
