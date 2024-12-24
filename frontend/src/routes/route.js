@@ -27,5 +27,9 @@ export const routes = {
     bookMarkTweet: `${BASE_URL}/tweet/bookmark-tweet`, // /:tweetId
     fetchAllBookMarkTweets: `${BASE_URL}/tweet/get-bookmark-tweets`,
 
+    // comment routes
+    createCommment: `${BASE_URL}/comment/createComment`,  //   /:tweetId
+
+    fetchCommentByTweetId: `${BASE_URL}/comment/fetchCommentsByTweetId`, //   /:tweetId 
 }
 
