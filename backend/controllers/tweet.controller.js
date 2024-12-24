@@ -28,6 +28,32 @@ export const fetchTweetByUserId = async (req, res) => {
     }
 }
 
+// fetchTweetById
+export const fetchTweetById = async (req, res) => {
+    try {
+        const tweetId = req.params.tweetId;
+
+        const tweet = await Tweet.findById(tweetId).populate({
+            path: "userId",
+            select: "avatar userName fullName"
+        });
+
+
+        return res.status(201).json({
+            success: true,
+            message: "Fetched  Tweet By tweetId!",
+            tweet,
+        });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error!",
+        });
+    }
+}
+
 // fetchAllTweets
 export const fetchAllTweets = async (req, res) => {
     try {
