@@ -24,6 +24,24 @@ const TweetPostPage = () => {
     const cookiesData = getCookie("twixter");
 
 
+
+    const { data: fetchCommentByTweetId } = useQuery({
+        queryKey: ["fetchCommentByTweetId", tweetId],
+        queryFn: async () => {
+            const response = await axios.get(`${routes.fetchCommentByTweetId}/${tweetId}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer ' + cookiesData,
+                },
+                withCredentials: true,
+            });
+
+            const data = await response.data?.comments;
+            console.log("fetchCommentByTweetId", data);
+            return data;
+        }
+    })
+
     const { data: tweetByTweetId } = useQuery({
         queryKey: ["tweetByTweetId", tweetId],
         queryFn: async () => {
@@ -44,12 +62,12 @@ const TweetPostPage = () => {
     const isBookmarked = authUser?.bookmarkedTweet?.includes(tweetByTweetId?._id?.toString());
     const isLiked = tweetByTweetId?.likes?.includes(authUser?._id?.toString());
 
-    console.log("tweetByTweetId", tweetByTweetId);
+    console.log("fetchCommentByTweetId", fetchCommentByTweetId);
 
     return (
-        <div className='bg-black hover:bg-zinc-950 p-5 border border-zinc-800 cursor-pointer h-screen'>
+        <div className='bg-black   border border-zinc-800 cursor-pointer h-screen'>
 
-            <div className='flex justify-between w-full'>
+            <div className='flex justify-between w-full p-5'>
 
 
 
@@ -151,9 +169,31 @@ const TweetPostPage = () => {
             </div>
 
 
+            <div className=' flex items-center gap-3 bg-black hover:bg-zinc-950 p-5 border-b border-zinc-800 cursor-pointer'>
+
+            </div>
+
 
 
         </div>)
 }
 
-export default TweetPostPage
+export default TweetPostPage;
+
+
+
+
+
+
+
+
+// return (
+//         <Link to={`/profile/${account?._id}`} className=' flex items-center gap-3 bg-black hover:bg-zinc-950 p-5 border-b border-zinc-800 cursor-pointer'>
+//             <img src={account?.avatar} alt={account?.userName} className='size-11 rounded-full' />
+
+//             <div>
+//                 <h1>{account?.fullName}</h1>
+//                 <p className='text-sm  text-[#5A5E62]'>@{account?.userName}</p>
+//             </div>
+//         </Link>
+//     )
