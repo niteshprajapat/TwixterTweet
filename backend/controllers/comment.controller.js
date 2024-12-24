@@ -186,3 +186,36 @@ export const commentLikeUnlike = async (req, res) => {
         });
     }
 }
+
+// fetchCommentsByTweetId
+export const fetchCommentsByTweetId = async (req, res) => {
+    try {
+        const tweetId = req.params.tweetId;
+        const userId = req.user._id;
+
+        const comments = await Comment.find({ tweetId }).populate({
+            path: "userId",
+            select: "avatar userName fullName"
+        });
+
+        if (!comments) {
+            return res.status(400).json({
+                success: false,
+                message: "Comments Not Found!",
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Comments Fetched by TweetId!",
+            comments
+        });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error!",
+        });
+    }
+}
