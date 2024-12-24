@@ -190,7 +190,7 @@ export const searchAccount = async (req, res) => {
                 { userName: { $regex: query, $options: 'i' } },
                 { fullName: { $regex: query, $options: 'i' } },
             ]
-        }).select("-password");
+        }).select("avatar userName fullName");
 
 
 
