@@ -32,7 +32,7 @@ const Home = () => {
     console.log("fetchAllTweets", fetchAllTweets);
 
     return (
-        <div className='flex flex-col'>
+        <div className='flex flex-col '>
 
             <div></div>
             <div></div>

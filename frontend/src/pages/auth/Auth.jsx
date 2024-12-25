@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -36,6 +36,8 @@ const Auth = () => {
     const queryClient = useQueryClient();
 
     const cookies = new Cookies();
+
+
 
     const { mutate: registerMutate, isError, error, isPending } = useMutation({
         mutationFn: async (registerData) => {
@@ -83,7 +85,19 @@ const Auth = () => {
             console.log(error);
             toast.error(error?.response?.data?.message);
         }
-    })
+    });
+
+
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+
+        if (token) {
+            cookies.set("twixter", token, { path: '/', secure: true });
+            toast.success("Logged in successfully!");
+            navigate('/'); // Redirect to the dashboard
+        }
+    }, []);
 
 
     return (
@@ -167,8 +181,18 @@ const Auth = () => {
                                 />
                             </div>
                         </CardContent>
-                        <CardFooter>
+                        {/* <CardFooter>
                             <Button onClick={() => loginMutate({ loginUserData, loginPassword })}>Login Now</Button>
+                        </CardFooter> */}
+
+                        <CardFooter className="flex flex-col gap-2">
+                            <Button onClick={() => loginMutate({ loginUserData, loginPassword })}>Login Now</Button>
+                            {/* <Button
+                                variant="outline"
+                                onClick={() => window.location.href = `http://localhost:5000/api/v1/auth/auth/google`}
+                            >
+                                Continue with Google
+                            </Button> */}
                         </CardFooter>
                     </Card>
                 </TabsContent>
