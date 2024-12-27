@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Bell, Ellipsis, Home, MessageCircle, Search, User2 } from 'lucide-react'
+import { Bell, BookmarkIcon, Ellipsis, Home, MessageCircle, Search, User2 } from 'lucide-react'
 import React, { useRef, useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
@@ -14,6 +14,7 @@ import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 
 const Sidebar = () => {
+    const { pathname } = useLocation();
     const cookies = new Cookies();
     const queryClient = useQueryClient();
 
@@ -156,10 +157,10 @@ const Sidebar = () => {
                     <Home />
                     <span>Home</span>
                 </Link>
-                <div className='flex items-center gap-4 cursor-pointer hover:bg-zinc-900  py-3 px-5 rounded-full'>
+                <Link to={"/explore"} className='flex items-center gap-4 cursor-pointer hover:bg-zinc-900  py-3 px-5 rounded-full'>
                     <Search />
                     <span>Explore</span>
-                </div>
+                </Link>
                 <div className='flex items-center gap-4 cursor-pointer hover:bg-zinc-900  py-3 px-5 rounded-full'>
                     <Bell />
                     <span>Notifications</span>
@@ -168,6 +169,10 @@ const Sidebar = () => {
                     <MessageCircle />
                     <span>Messages</span>
                 </div>
+                <Link to={`/bookmarks`} className='flex items-center gap-4 cursor-pointer hover:bg-zinc-900  py-3 px-5 rounded-full'>
+                    <BookmarkIcon />
+                    <span>Bookmarks</span>
+                </Link>
                 <Link to={`/profile/${authUser?._id}`} className='flex items-center gap-4 cursor-pointer hover:bg-zinc-900  py-3 px-5 rounded-full'>
                     <User2 />
                     <span>Profile</span>
