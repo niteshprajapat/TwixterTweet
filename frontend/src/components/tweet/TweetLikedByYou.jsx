@@ -102,8 +102,13 @@ const TweetLikedByYou = ({ tweet }) => {
                         <p>{tweet?.tweetContent}</p>
 
                         {
+
                             tweet?.tweetImage && (
-                                <img src={tweet?.tweetImage} alt={tweet?.tweetContent} className='w-full rounded-lg' />
+                                !tweet?.tweetImage?.includes(".mp4") ? (
+                                    <img src={tweet?.tweetImage} alt={tweet?.tweetContent} className='w-full rounded-[20px] h-[250px] object-cover' />
+                                ) : (
+                                    <video src={tweet?.tweetImage} alt={tweet?.tweetContent} className='w-full rounded-[20px] h-[400px] object-contain' controls muted />
+                                )
                             )
                         }
 
@@ -121,7 +126,10 @@ const TweetLikedByYou = ({ tweet }) => {
                                 <span>{tweet?.likes?.length}</span>
                             </div>
                             <div>
-                                {isBookmarked ? <Bookmark color='pink' size={17} /> : <Bookmark size={17} />}
+                                {isBookmarked ? <Bookmark size={17} color='#1D9BF0' fill='#1D9BF0' /> : <Bookmark size={17} />}
+
+
+                                {/* {isBookmarked ? <Bookmark color='pink' size={17} /> : <Bookmark size={17} />} */}
                             </div>
                             <div className='flex items-center gap-1'>
                                 <Share size={17} />
