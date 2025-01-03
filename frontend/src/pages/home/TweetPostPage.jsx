@@ -171,7 +171,6 @@ const TweetPostPage = () => {
 
             <div className=' flex items-center gap-3 bg-black hover:bg-zinc-950 p-5 border-b border-zinc-800 cursor-pointer'>
 
-
             </div>
         </div>
     )
